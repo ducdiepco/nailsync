@@ -1,0 +1,45 @@
+appId: com.example.nailsync
+name: Ticket Detail
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+# Create a ticket from the queue screen
+- runFlow:
+    file: subflows/create_ticket.yaml
+    env:
+      CUSTOMER_NAME: "Maria Chen"
+
+# Navigate into the ticket
+- tapOn: "Maria Chen"
+
+# AppBar shows customer name and status
+- assertVisible: "Maria Chen"
+- assertVisible: "Waiting"
+
+# Action buttons visible
+- assertVisible: "VOID"
+- assertVisible: "→ Assigned"
+
+# Advance through statuses
+- tapOn: "→ Assigned"
+- assertVisible: "Assigned"
+- assertVisible: "→ In Progress"
+
+- tapOn: "→ In Progress"
+- assertVisible: "In Progress"
+- assertVisible: "→ Ready for Payment"
+
+- tapOn: "→ Ready for Payment"
+- assertVisible: "Ready for Payment"
+- assertVisible: "PAY"
+
+# VOID button still visible on active ticket
+- assertVisible: "VOID"
+
+# Go back to queue
+- back
+- assertVisible: "NAILSYNC"

@@ -1,0 +1,14 @@
+appId: com.example.nailsync
+---
+# Reusable subflow: opens the New Ticket dialog and creates a walk-in ticket.
+# Must be called from the queue screen.
+# Env: CUSTOMER_NAME (required)
+
+- tapOn: "New Ticket"
+
+- assertVisible: "New Ticket"
+
+- tapOn: "Walk-in Name"
+- inputText: ${CUSTOMER_NAME}
+
+- tapOn: "Create"

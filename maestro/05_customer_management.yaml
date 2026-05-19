@@ -1,0 +1,48 @@
+appId: com.example.nailsync
+name: Customer Management
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+# Navigate to customer list
+- tapOn: "CUSTOMERS"
+- assertVisible: "Customers"
+
+# Empty list initially
+- assertNotVisible: "Jane Doe"
+
+# Create a new customer via FAB
+- tapOn: "New Customer"
+- assertVisible: "New Customer"
+
+# Form fields visible
+- assertVisible: "First Name *"
+- assertVisible: "Last Name *"
+- assertVisible: "Phone"
+- assertVisible: "Email"
+- assertVisible: "Date of Birth (YYYY-MM-DD)"
+
+- tapOn: "First Name *"
+- inputText: "Jane"
+
+- tapOn: "Last Name *"
+- inputText: "Doe"
+
+- tapOn: "Phone"
+- inputText: "555-1234"
+
+- tapOn: "Email"
+- inputText: "jane@example.com"
+
+# Scroll down to reveal save button
+- scroll
+
+- tapOn: "SAVE CUSTOMER"
+
+# Returns to customer list with new customer visible
+- assertVisible: "Customers"
+- assertVisible: ".*Jane Doe.*"
+- assertVisible: ".*555-1234.*"

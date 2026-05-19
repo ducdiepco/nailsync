@@ -1,0 +1,37 @@
+appId: com.example.nailsync
+name: Edit Customer
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+# Create a customer first
+- tapOn: "CUSTOMERS"
+- tapOn: "New Customer"
+- tapOn: "First Name *"
+- inputText: "Bob"
+- tapOn: "Last Name *"
+- inputText: "Smith"
+- tapOn: "SAVE CUSTOMER"
+
+# Customer is now in the list
+- assertVisible: ".*Bob Smith.*"
+
+# Tap on the customer to edit
+- tapOn: ".*Bob Smith.*"
+- assertVisible: "Edit Customer"
+
+# UPDATE CUSTOMER button visible (not SAVE CUSTOMER)
+- assertVisible: "UPDATE CUSTOMER"
+
+# Update the phone number
+- tapOn: "Phone"
+- inputText: "555-9999"
+
+- tapOn: "UPDATE CUSTOMER"
+
+# Back to list — updated customer still there
+- assertVisible: "Customers"
+- assertVisible: ".*Bob Smith.*"

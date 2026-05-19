@@ -1,0 +1,39 @@
+appId: com.example.nailsync
+name: Add Service and Void Ticket
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+- runFlow:
+    file: subflows/create_ticket.yaml
+    env:
+      CUSTOMER_NAME: "Bob Lee"
+
+- tapOn: "Bob Lee"
+
+# Two-pane: left panel shows placeholder, right panel shows catalog
+- assertVisible: "VOID"
+- assertVisible: "→ Assigned"
+
+# Tap a seeded service from the right-pane catalog
+- tapOn: "Gel Manicure"
+
+# Service now appears in the left (ticket) panel
+- assertVisible: "Gel Manicure"
+
+# Totals update
+- assertVisible: "Subtotal"
+
+# Cancel/void the ticket
+- tapOn: "VOID"
+
+# Status badge updates to Cancelled, action buttons gone
+- assertVisible: "Cancelled"
+- assertNotVisible: "VOID"
+
+# Back to queue — cancelled ticket not shown in active queue
+- back
+- assertNotVisible: "Bob Lee"

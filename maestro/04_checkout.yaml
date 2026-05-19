@@ -1,0 +1,52 @@
+appId: com.example.nailsync
+name: Checkout Flow
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+- runFlow:
+    file: subflows/create_ticket.yaml
+    env:
+      CUSTOMER_NAME: "Tracy Nguyen"
+
+# Navigate to ticket detail
+- tapOn: "Tracy Nguyen"
+
+# Add a seeded service from the right-pane catalog
+- tapOn: "Gel Manicure"
+- assertVisible: "Gel Manicure"
+
+# Advance to READY_FOR_PAYMENT
+- tapOn: "→ Assigned"
+- tapOn: "→ In Progress"
+- tapOn: "→ Ready for Payment"
+- assertVisible: "PAY"
+
+# Navigate to checkout
+- tapOn: "PAY"
+- waitForAnimationToEnd
+
+# Checkout screen loaded — tip presets visible
+- assertVisible: "No Tip"
+- assertVisible: "10%"
+- assertVisible: "15%"
+- assertVisible: "20%"
+
+# Select 15% tip
+- tapOn: "15%"
+
+# Totals row visible
+- assertVisible: "Subtotal"
+- assertVisible: "Tax (8.5%)"
+- assertVisible: "Tip"
+- assertVisible: "TOTAL"
+
+# Button text is "CONFIRM PAYMENT  ·  $XX.XX" — use wildcard to match
+- tapOn: ".*CONFIRM PAYMENT.*"
+
+# Returns to queue; ticket is now closed (PAID)
+- assertVisible: "NAILSYNC"
+- assertNotVisible: "Tracy Nguyen"

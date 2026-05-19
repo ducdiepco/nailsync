@@ -1,0 +1,52 @@
+appId: com.example.nailsync
+name: Combine Tickets
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+# Create two tickets (each creation lands on the ticket detail — navigate back between them)
+- runFlow:
+    file: subflows/create_ticket.yaml
+    env:
+      CUSTOMER_NAME: "Ticket A"
+
+- back
+
+- runFlow:
+    file: subflows/create_ticket.yaml
+    env:
+      CUSTOMER_NAME: "Ticket B"
+
+- back
+
+# Both tickets visible on queue
+- assertVisible: "Ticket A"
+- assertVisible: "Ticket B"
+
+# Navigate to Ticket A
+- tapOn: "Ticket A"
+- assertVisible: "Ticket A"
+
+# COMBINE button appears because Ticket B is a valid target
+- assertVisible: "COMBINE"
+
+# Open combine dialog
+- tapOn: "COMBINE"
+- assertVisible: "Combine Tickets"
+- assertVisible: "Ticket B"
+
+# Select Ticket B as the source to merge in
+- tapOn: "Ticket B"
+
+# Confirm
+- tapOn: "COMBINE"
+
+# Returns to queue (onDone navigates back)
+- assertVisible: "NAILSYNC"
+
+# Ticket A remains; Ticket B is cancelled (removed from active queue)
+- assertVisible: "Ticket A"
+- assertNotVisible: "Ticket B"

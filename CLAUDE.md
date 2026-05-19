@@ -8,20 +8,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Build debug APK
 ./gradlew assembleDebug
 
-# Run unit tests
+# Run unit tests (ViewModel tests)
 ./gradlew test
 
 # Run a single unit test class
-./gradlew test --tests "com.example.nailsync.ExampleUnitTest"
-
-# Run instrumented (on-device) tests
-./gradlew connectedAndroidTest
+./gradlew test --tests "com.example.nailsync.viewmodel.QueueViewModelTest"
 
 # Lint
 ./gradlew lint
 
 # Clean build
 ./gradlew clean assembleDebug
+
+# Install Maestro CLI (once, requires Java 17+)
+curl -Ls "https://get.maestro.mobile.dev" | bash
+
+# Run all Maestro UI flows (app must be installed on emulator/device)
+maestro test maestro/
+
+# Run a single flow
+maestro test maestro/01_queue_screen.yaml
+
+# Run only smoke-tagged flows
+maestro test --include-tags smoke maestro/
+
+# Watch mode (re-runs on file save — great during development)
+maestro test -c maestro/01_queue_screen.yaml
 ```
 
 ## UI Design

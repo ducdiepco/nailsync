@@ -1,0 +1,36 @@
+appId: com.example.nailsync
+name: Queue Screen
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+# App bar
+- assertVisible: "NAILSYNC"
+- assertVisible: "CUSTOMERS"
+
+# Empty state
+- assertVisible: "No active tickets"
+
+# Open create ticket dialog
+- tapOn: "New Ticket"
+- assertVisible: "New Ticket"
+- assertVisible: "Walk-in Name"
+- assertVisible: "Search customer"
+- assertVisible: "Create"
+- assertVisible: "Cancel"
+
+# Dismiss dialog
+- tapOn: "Cancel"
+- assertVisible: "NAILSYNC"
+
+# Create a ticket and verify it appears in the queue
+- runFlow:
+    file: subflows/create_ticket.yaml
+    env:
+      CUSTOMER_NAME: "Alice Wong"
+
+- assertVisible: "Alice Wong"
+- assertVisible: "Waiting"

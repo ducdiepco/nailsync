@@ -1,0 +1,54 @@
+appId: com.example.nailsync
+name: Customer Search
+tags:
+  - smoke
+---
+
+- launchApp:
+    clearState: true
+
+# Create two customers
+- tapOn: "CUSTOMERS"
+
+- tapOn: "New Customer"
+- tapOn: "First Name *"
+- inputText: "Alice"
+- tapOn: "Last Name *"
+- inputText: "Wong"
+- tapOn: "Phone"
+- inputText: "555-0001"
+- tapOn: "SAVE CUSTOMER"
+- assertVisible: ".*Alice Wong.*"
+
+- tapOn: "New Customer"
+- assertVisible: "First Name *"
+- tapOn: "First Name *"
+- inputText: "Carol"
+- tapOn: "Last Name *"
+- inputText: "Jones"
+- tapOn: "Phone"
+- inputText: "555-0002"
+- tapOn: "SAVE CUSTOMER"
+
+# Both customers visible
+- assertVisible: ".*Alice Wong.*"
+- assertVisible: ".*Carol Jones.*"
+
+# Search by name
+- tapOn:
+    text: "Search by name, phone or email"
+    label: "Search by name, phone or email"
+- inputText: "alice"
+
+- assertVisible: ".*Alice Wong.*"
+- assertNotVisible: ".*Carol Jones.*"
+
+# Clear search
+- eraseText: 50
+- assertVisible: ".*Alice Wong.*"
+- assertVisible: ".*Carol Jones.*"
+
+# Search by phone
+- inputText: "555-0002"
+- assertNotVisible: ".*Alice Wong.*"
+- assertVisible: ".*Carol Jones.*"
